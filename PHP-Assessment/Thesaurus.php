@@ -5,7 +5,7 @@ class Thesaurus
     private $thesaurus;
     
     function Thesaurus()
-	{
+    {
        $this->thesaurus = array("buy" => array("purchase"), "big" => array("great", "large"));
     }
     
