@@ -13,50 +13,48 @@ class Path
     {
         if (!$this->isValidPath($newPath)) return 'this is not a valid path';
 
-        $newPathArray = explode('/', $newPath);
-        $currentPathArray = explode('/', $this->currentPath);
-        $currentPathLength = count($currentPathArray);
+        $newPathFolders = explode('/', $newPath);
+        $currentPathFolders = explode('/', $this->currentPath);
+        $currentPathLength = count($currentPathFolders);
 
         $i = 1;
-        foreach ($newPathArray as $key => $folder) {
-
-//            var_dump(count($folder));
-            if (count($folder) > 0 && ctype_alpha($folder)) {
-                return 'This is not a valid path';
-            }
+        foreach ($newPathFolders as $key => $folder) {
 
             if ($key === 0 && $folder === '') {
-                // absolute path
+                // It is an absolute path
                 return $newPath;
             } else {
-                // relative path
+                // It is a relative path
                 if ($folder === '..') {
-                    unset($currentPathArray[$currentPathLength-$i]);
-//                var_dump($i);
-//                var_dump('current');
-//                var_dump($currentPathArray);
-
+                    unset($currentPathFolders[$currentPathLength-$i]);
                 } else {
                     // absolute path
-                    // Add to array
-                    echo 'blabla';
+                    array_push($currentPathFolders, $folder);
                 }
             }
 
             $i++;
         }
 
-        return 'het nieuwe path (array to string)';
+        return implode('/', $currentPathFolders);
     }
 
+    /**
+     * @param $path
+     * @return bool
+     */
     private function isValidPath($path)
     {
-        // nog testen
         $pathArray = explode('/', $path);
 
         foreach ($pathArray as $folderName){
-            if (count($folderName) > 1 && !ctype_alpha($folderName)) {
-                return false;
+
+            if ($folderName !== '..' && $folderName !== '') {
+                // Only foldernames of one alphabetic character exist
+                if (strlen($folderName) !== 1 || !ctype_alpha($folderName)) {
+
+                    return false;
+                }
             }
         }
 
@@ -66,4 +64,4 @@ class Path
 
 $path = new Path('/a/b/c/d');
 $path->cd('../../x');
-echo $path->currentPath;
+var_dump($path->cd('../../R/x'));
